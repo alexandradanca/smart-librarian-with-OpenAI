@@ -10,7 +10,7 @@ Smart Librarian is an AI-powered book recommendation and information chatbot. It
 - **Frontend:** HTML, CSS, JavaScript (no framework), custom chat UI.
 - **Data:** Book summaries and themes stored in JSON and indexed in ChromaDB.
 - **Deployment:** Docker and Docker Compose for easy setup and portability.
-
+```
 ├── backend/
 │   ├── app.py                # Flask backend, API, main logic
 │   ├── config.py             # Backend configuration
@@ -38,7 +38,15 @@ Smart Librarian is an AI-powered book recommendation and information chatbot. It
 ├── requirements.txt          # Dependențe Python
 └── README.md                 # Documentație proiect
 ```
----
+## File Structure
+- `backend/app.py` — Main Flask backend, API endpoints, RAG logic, TTS, image generation.
+- `backend/templates/index.html` — Main chat UI, frontend logic, loading animation.
+- `backend/static/style.css` — Custom styles for chat bubbles, avatars, and layout.
+- `data/book_summaries.json` — Book summaries and themes (used for recommendations).
+- `services/chunk_and_insert.py` — Script to chunk and index books in ChromaDB.
+- `Dockerfile`, `docker-compose.yml` — Containerization and deployment.
+- `.env` — Environment variables (not committed).
+
 ---
 
 ## Features
@@ -80,45 +88,6 @@ Smart Librarian is an AI-powered book recommendation and information chatbot. It
   docker-compose up --build
   ```
 - Access the chatbot at [http://localhost:5000](http://localhost:5000)
-
----
-
-## File Structure
-- `backend/app.py` — Main Flask backend, API endpoints, RAG logic, TTS, image generation.
-- `backend/templates/index.html` — Main chat UI, frontend logic, loading animation.
-- `backend/static/style.css` — Custom styles for chat bubbles, avatars, and layout.
-- `data/book_summaries.json` — Book summaries and themes (used for recommendations).
-- `services/chunk_and_insert.py` — Script to chunk and index books in ChromaDB.
-- `Dockerfile`, `docker-compose.yml` — Containerization and deployment.
-- `.env` — Environment variables (not committed).
-
----
-
-## Contributors
-- Alexandra Simona Danca (project lead)
-- GitHub Copilot (AI assistant)
-
----
-
-## Troubleshooting
-- **No book recommendations:** Ensure `book_summaries.json` is populated and ChromaDB is indexed.
-- **OpenAI errors:** Check your API key and model names in `.env`.
-- **TTS/Image issues:** Verify OpenAI API supports the requested features and your key has access.
-- **Docker issues:** Rebuild containers and check port mappings.
-
----
-
-## Future Improvements
-- Add user authentication and profiles.
-- Support for more languages and book sources.
-- Admin dashboard for book management.
-- Advanced analytics and feedback collection.
-- Mobile-friendly UI enhancements.
-
----
-
-## License
-This project is for educational and demonstration purposes. See LICENSE for details.
 
 ---
 
@@ -235,7 +204,11 @@ with open(JSON_PATH, "r", encoding="utf-8") as f:
     books = json.load(f)
 # ...chunking and insertion logic...
 ```
-
+## How Functions Work Together
+- The frontend collects user input and sends it to the backend.
+- The backend processes the question, retrieves relevant book data, and generates a response using OpenAI.
+- If requested, the backend generates images and speech, which are returned to the frontend for display.
+- All responses are shown in the chat interface, with loading animations and avatars for clarity.
 ---
 
 ## Screenshots
@@ -253,8 +226,28 @@ Below are example screenshots of the Smart Librarian Chatbot in action:
 
 ---
 
-## How Functions Work Together
-- The frontend collects user input and sends it to the backend.
-- The backend processes the question, retrieves relevant book data, and generates a response using OpenAI.
-- If requested, the backend generates images and speech, which are returned to the frontend for display.
-- All responses are shown in the chat interface, with loading animations and avatars for clarity.
+## Contributors
+- Alexandra Simona Danca (project lead)
+- GitHub Copilot (AI assistant)
+
+---
+
+## Troubleshooting
+- **No book recommendations:** Ensure `book_summaries.json` is populated and ChromaDB is indexed.
+- **OpenAI errors:** Check your API key and model names in `.env`.
+- **TTS/Image issues:** Verify OpenAI API supports the requested features and your key has access.
+- **Docker issues:** Rebuild containers and check port mappings.
+
+---
+
+## Future Improvements
+- Add user authentication and profiles.
+- Support for more languages and book sources.
+- Admin dashboard for book management.
+- Advanced analytics and feedback collection.
+- Mobile-friendly UI enhancements.
+
+---
+
+## License
+This project is for educational and demonstration purposes. See LICENSE for details.
