@@ -1,0 +1,62 @@
+[
+  {
+    "title": "1984",
+    "summary": "In a totalitarian future, Winston Smith lives under the constant surveillance of Big Brother and the oppressive Party. As he secretly rebels against the regime, Winston seeks truth and freedom in a world where independent thought is a crime. His forbidden love affair with Julia and his quest for reality lead to tragic consequences, exposing the terrifying power of propaganda, control, and psychological manipulation.",
+    "themes": ["freedom", "control", "surveillance", "totalitarianism", "truth"]
+  },
+  {
+    "title": "The Hobbit",
+    "summary": "Bilbo Baggins, a comfort-loving hobbit, is swept into an epic adventure when the wizard Gandalf and a group of dwarves recruit him to help reclaim their stolen treasure from the fearsome dragon Smaug. Along the way, Bilbo faces trolls, goblins, and giant spiders, discovering courage and resourcefulness he never knew he had. His journey transforms him, forging unexpected friendships and testing his resolve in moments of danger and wonder.",
+    "themes": ["friendship", "adventure", "courage", "self-discovery"]
+  },
+  {
+    "title": "Dune",
+    "summary": "On the harsh desert planet Arrakis, young Paul Atreides is thrust into a world of political intrigue, betrayal, and ecological prophecy. As his noble family is targeted by rival houses, Paul must navigate deadly plots and the mysteries of the Fremen people. He discovers his destiny as a messianic figure, leading a revolution that will reshape the future of the planet and its vital resource, the spice melange. Dune explores themes of power, religion, and the delicate balance between humanity and nature.",
+    "themes": ["politics", "ecology", "destiny", "power", "religion"]
+  },
+  {
+    "title": "Pride and Prejudice",
+    "summary": "Elizabeth Bennet, an intelligent and spirited young woman, faces the challenges of love and social expectations in Regency England. Her encounters with the proud and enigmatic Mr. Darcy are marked by misunderstandings, witty exchanges, and evolving perceptions. As Elizabeth learns to overcome her prejudices and Darcy confronts his pride, their journey reveals the importance of self-awareness, family, and reputation in a society governed by class and convention.",
+    "themes": ["love", "class", "family", "reputation"]
+  },
+  {
+    "title": "To Kill a Mockingbird",
+    "summary": "In the racially charged American South of the 1930s, young Scout Finch grows up in a small town where her father, Atticus, defends a Black man falsely accused of a terrible crime. Through Scout’s eyes, we witness the deep-seated prejudices and moral complexities of her community. The story explores justice, empathy, and the loss of innocence as Scout and her brother Jem learn about courage and compassion in the face of hatred and injustice.",
+    "themes": ["justice", "racism", "empathy", "coming-of-age"]
+  },
+  {
+    "title": "The Name of the Wind",
+    "summary": "Kvothe, a gifted young man, recounts his extraordinary life story, from his childhood as an orphaned street performer to his rise as a legendary arcanist and musician. Battling poverty, prejudice, and mysterious enemies, Kvothe seeks knowledge and power at the University, mastering magic and uncovering secrets about his family’s tragic past. His journey is one of myth, music, and the search for identity in a world filled with wonder and danger.",
+    "themes": ["magic", "music", "myth", "identity"]
+  },
+  {
+    "title": "The Book Thief",
+    "summary": "Set in Nazi Germany, the story follows Liesel Meminger, a young girl who finds solace in stealing books and sharing stories during a time of war and loss. Narrated by Death, the novel explores the impact of words and friendship as Liesel’s family hides a Jewish man from persecution. Through hardship and tragedy, Liesel discovers resilience and the enduring power of literature to bring hope in the darkest times.",
+    "themes": ["war", "death", "friendship", "words", "resilience"]
+  },
+  {
+    "title": "Sapiens: A Brief History of Humankind",
+    "summary": "Yuval Noah Harari presents a sweeping history of Homo sapiens, tracing our journey from the cognitive revolution to the rise of agriculture, empires, and modern capitalism. The book explores how shared myths, culture, and technology have shaped societies and the future of humanity, including the ethical dilemmas posed by biotechnology and artificial intelligence. Sapiens challenges readers to reflect on what it means to be human in a rapidly changing world.",
+    "themes": ["history", "anthropology", "culture", "technology"]
+  },
+  {
+    "title": "Neuromancer",
+    "summary": "Case, a washed-up computer hacker, is recruited by mysterious employers for a high-stakes cyberspace heist. As he navigates a world of artificial intelligence, corporate intrigue, and digital landscapes, Case confronts questions of identity and agency. William Gibson’s groundbreaking novel defined the cyberpunk genre, exploring the blurred boundaries between humanity and technology in a future dominated by powerful corporations and sentient machines.",
+    "themes": ["cyberpunk", "AI", "identity", "corporations"]
+  },
+  {
+    "title": "The Road",
+    "summary": "In a bleak, post-apocalyptic America, a father and his young son journey through a landscape ravaged by disaster and devoid of civilization. Facing starvation, danger, and despair, they cling to each other and the hope of finding safety. Their bond and moral compass—“carrying the fire”—offer a glimmer of humanity in a world stripped bare. The Road is a haunting meditation on survival, love, and the enduring strength of the human spirit.",
+    "themes": ["survival", "fatherhood", "hope", "post-apocalyptic"]
+  },
+  {
+    "title": "The Alchemist",
+    "summary": "Santiago, a young shepherd from Spain, dreams of finding a hidden treasure in Egypt. Guided by omens and wise mentors, he embarks on a journey of self-discovery, learning to listen to his heart and pursue his Personal Legend. Along the way, Santiago encounters love, loss, and spiritual awakening, discovering that true treasure lies not in gold, but in fulfilling one’s destiny and understanding the soul of the world.",
+    "themes": ["destiny", "dreams", "self-discovery", "spirituality"]
+  },
+  {
+    "title": "The Fellowship of the Ring",
+    "summary": "Frodo Baggins inherits the One Ring, a powerful artifact sought by the dark lord Sauron. Joined by a diverse Fellowship, Frodo embarks on a perilous quest to destroy the Ring in the fires of Mount Doom. Their journey is fraught with danger, sacrifice, and the struggle between good and evil. The Fellowship of the Ring is a timeless tale of friendship, courage, and the fight to protect Middle-earth from darkness.",
+    "themes": ["friendship", "sacrifice", "good vs evil", "quest"]
+  }
+]

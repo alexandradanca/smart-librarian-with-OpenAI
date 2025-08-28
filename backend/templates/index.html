@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Librarian Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <span class="avatar">🤖📖</span>
+            <span class="chat-title" style="font-size:2rem;font-weight:bold;font-family:'Montserrat', 'Roboto', Arial, sans-serif;">Smart Librarian Chatbot</span>
+            <span style="margin-left:auto;">Your AI assistant for books</span>
+        </div>
+        <div class="chat-body" id="chat-body">
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="user-input" placeholder="Ask a question about books..." />
+            <button id="voice-btn" title="Voice mode">🎤</button>
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatBody = document.getElementById('chat-body');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const voiceBtn = document.getElementById('voice-btn');
+    let history = [];
+
+    function showLoadingBubble() {
+      const loadingRow = document.createElement('div');
+      loadingRow.className = 'loading-row';
+      loadingRow.style.display = 'flex';
+      loadingRow.style.alignItems = 'center';
+      loadingRow.style.gap = '8px';
+      loadingRow.style.marginBottom = '8px';
+      const botIcon = document.createElement('span');
+      botIcon.textContent = '🤖';
+      botIcon.style.fontSize = '1.3em';
+      botIcon.style.marginRight = '6px';
+      const loadingBubble = document.createElement('div');
+      loadingBubble.className = 'chat-bubble bot';
+      loadingBubble.innerHTML = `<span class='loading-dots'><span></span><span></span><span></span></span>`;
+      loadingRow.appendChild(botIcon);
+      loadingRow.appendChild(loadingBubble);
+      chatBody.appendChild(loadingRow);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      return loadingRow;
+    }
+
+    async function checkBadLanguageWithOpenAI(text) {
+      // Prompt for detecting offensive language
+      const prompt = `Analyze the following text and respond with "true" if it contains offensive, hateful, or insulting language. Respond with "false" if it does not contain such language. Text: ${text}`;
+      const response = await fetch('/ask', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({question: prompt, history: []})
+      });
+      const data = await response.json();
+      return (data.answer && data.answer.trim().toLowerCase().includes('true'));
+    }
+
+    async function sendQuestion() {
+      const question = userInput.value;
+      if (!question) return;
+      // Always show user message bubble
+      const userRow = document.createElement('div');
+      userRow.style.display = 'flex';
+      userRow.style.alignItems = 'center';
+      userRow.style.gap = '8px';
+      userRow.style.justifyContent = 'flex-end';
+      userRow.style.marginBottom = '2px';
+      const userBubble = document.createElement('div');
+      userBubble.className = 'chat-bubble user';
+      userBubble.style.position = 'relative';
+      userBubble.style.marginBottom = '0';
+      userBubble.innerHTML = `
+          <span>${question}</span>
+          <div class='user-actions-corner' style='position:absolute;right:8px;bottom:6px;display:flex;gap:8px;align-items:center;'>
+              <span class='tts-btn' style='cursor:pointer;font-size:1em;' title='Listen'>🔊</span>
+          </div>
+      `;
+      const userIcon = document.createElement('span');
+      userIcon.textContent = '🧑';
+      userIcon.style.fontSize = '1.3em';
+      userIcon.style.marginLeft = '6px';
+      userRow.appendChild(userBubble);
+      userRow.appendChild(userIcon);
+      chatBody.appendChild(userRow);
+      userBubble.querySelector('.tts-btn').onclick = function() {
+          window.speakText(question);
+      };
+      userInput.value = '';
+      // Check language using OpenAI
+      const isBad = await checkBadLanguageWithOpenAI(question);
+      if (isBad) {
+        // Polite response using OpenAI
+        const politePrompt = `Respond politely to a user who has used offensive or insulting language. Do not respond with an insult, but with a calm and respectful message.`;
+        const response = await fetch('/ask', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({question: politePrompt, history: []})
+        });
+        const data = await response.json();
+        // Bubble for polite response
+        const botRow = document.createElement('div');
+        botRow.style.display = 'flex';
+        botRow.style.alignItems = 'center';
+        botRow.style.gap = '8px';
+        botRow.style.marginBottom = '8px';
+        const botIcon = document.createElement('span');
+        botIcon.textContent = '🤖';
+        botIcon.style.fontSize = '1.3em';
+        botIcon.style.marginRight = '6px';
+        const botBubble = document.createElement('div');
+        botBubble.className = 'chat-bubble bot';
+        botBubble.style.position = 'relative';
+        botBubble.innerHTML = `<span>${data.answer}</span>`;
+        botRow.appendChild(botIcon);
+        botRow.appendChild(botBubble);
+        chatBody.appendChild(botRow);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        return;
+      }
+      // Add loading bubble and fetch bot response for non-offensive messages
+      const loadingRow = showLoadingBubble();
+      fetch('/ask', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({question, history})
+      })
+      .then(res => res.json())
+      .then(data => {
+          // Remove loading bubble
+          if (loadingRow && loadingRow.parentNode) loadingRow.parentNode.removeChild(loadingRow);
+          // Format numbered lists in bot answer
+          function formatList(text) {
+              return text.replace(/(\d+\.)/g, '<br><b>$1</b>').replace(/^<br>/, '');
+          }
+          const formattedAnswer = formatList(data.answer);
+          // Bubble for text response
+          const botRow = document.createElement('div');
+          botRow.style.display = 'flex';
+          botRow.style.alignItems = 'center';
+          botRow.style.gap = '8px';
+          botRow.style.marginBottom = '8px';
+          const botIcon = document.createElement('span');
+          botIcon.textContent = '🤖';
+          botIcon.style.fontSize = '1.3em';
+          botIcon.style.marginRight = '6px';
+          const botBubble = document.createElement('div');
+          botBubble.className = 'chat-bubble bot';
+          botBubble.style.position = 'relative';
+          botBubble.innerHTML = `
+              <span>${formattedAnswer}</span>
+              <div class='bot-actions-corner' style='position:absolute;right:8px;bottom:6px;display:flex;gap:8px;align-items:center;'>
+                  <span class='tts-btn' style='cursor:pointer;font-size:1em;' title='Listen'>🔊</span>
+                  <span class='img-btn' style='cursor:pointer;font-size:1em;' title='Image'>🖼️</span>
+              </div>
+              <span class='img-output'></span>
+          `;
+          botRow.appendChild(botIcon);
+          botRow.appendChild(botBubble);
+          chatBody.appendChild(botRow);
+          // Separate bubble for image, below the text response
+          if (data.image_url) {
+              const imgRow = document.createElement('div');
+              imgRow.style.display = 'flex';
+              imgRow.style.alignItems = 'center';
+              imgRow.style.gap = '8px';
+              imgRow.style.marginBottom = '8px';
+              // Bot avatar
+              const botIconImg = document.createElement('span');
+              botIconImg.textContent = '🤖';
+              botIconImg.style.fontSize = '1.3em';
+              botIconImg.style.marginRight = '6px';
+              // Image bubble
+              const imgBubble = document.createElement('div');
+              imgBubble.className = 'chat-bubble bot';
+              imgBubble.style.position = 'relative';
+              imgBubble.innerHTML = `<img src='${data.image_url}' style='max-width:200px;max-height:200px;margin-top:8px;' />`;
+              imgRow.appendChild(botIconImg);
+              imgRow.appendChild(imgBubble);
+              // Add image immediately after text bubble
+              botRow.insertAdjacentElement('afterend', imgRow);
+              chatBody.scrollTop = chatBody.scrollHeight;
+          }
+          history.push({role: 'user', content: question});
+          history.push({role: 'assistant', content: data.answer});
+          chatBody.scrollTop = chatBody.scrollHeight;
+          // Image generation
+          botBubble.querySelector('.img-btn').onclick = function() {
+              fetch('/generate_image', {
+                  method: 'POST',
+                  headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({prompt: data.answer})
+              })
+              .then(res => res.json())
+              .then(imgData => {
+                  // Create new bubble for image
+                  const imgRow = document.createElement('div');
+                  imgRow.style.display = 'flex';
+                  imgRow.style.alignItems = 'center';
+                  imgRow.style.gap = '8px';
+                  imgRow.style.marginBottom = '8px';
+                  const botIconImg = document.createElement('span');
+                  botIconImg.textContent = '🤖';
+                  botIconImg.style.fontSize = '1.3em';
+                  botIconImg.style.marginRight = '6px';
+                  const imgBubble = document.createElement('div');
+                  imgBubble.className = 'chat-bubble bot';
+                  imgBubble.style.position = 'relative';
+                  imgBubble.innerHTML = `<img src='${imgData.url}' style='max-width:400px;max-height:400px;margin-top:8px;' />`;
+                  imgRow.appendChild(botIconImg);
+                  imgRow.appendChild(imgBubble);
+                  botRow.insertAdjacentElement('afterend', imgRow);
+                  chatBody.scrollTop = chatBody.scrollHeight;
+              });
+          };
+          // TTS
+          botBubble.querySelector('.tts-btn').onclick = function() {
+              window.speakText(data.answer);
+          };
+      });
+    }
+
+    sendBtn.onclick = sendQuestion;
+    userInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            sendQuestion();
+        }
+    });
+
+    // Text to Speech with OpenAI TTS
+    window.speakText = function(text) {
+        console.log('Text-to-speech click:', text);
+        fetch('/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('TTS Error: ' + response.statusText);
+            return response.blob();
+        })
+        .then(blob => {
+            const audioUrl = URL.createObjectURL(blob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+        })
+        .catch(err => {
+            alert('Error playing voice: ' + err.message);
+        });
+    }
+
+    // Speech to Text
+    voiceBtn.onclick = function() {
+        if (!('webkitSpeechRecognition' in window)) {
+            alert('Browser does not support Speech Recognition');
+            return;
+        }
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'ro-RO';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        recognition.onresult = function(event) {
+            userInput.value = event.results[0][0].transcript;
+        };
+        recognition.start();
+    };
+});
+</script>
+</html>
